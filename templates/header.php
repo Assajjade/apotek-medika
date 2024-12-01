@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user'])) {
     header('Location: pages/login.php');
     exit;
@@ -15,7 +18,7 @@ if (!isset($_SESSION['user'])) {
 <body>
     <div class="header">
         <h1>POS Apotek Media Medika</h1>
-        <p>Selamat datang, <?= $_SESSION['user']['username']; ?></p>
+        <p>Selamat datang, <?= htmlspecialchars($_SESSION['user']['username']); ?></p>
         <nav>
             <a href="dashboard.php">Dashboard</a>
             <a href="manage_stocks.php">Kelola Stok</a>

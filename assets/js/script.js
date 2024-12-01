@@ -1,4 +1,3 @@
-// Example: Alert for confirmation (optional enhancement)
 document.addEventListener('DOMContentLoaded', function () {
     const deleteLinks = document.querySelectorAll('.delete-link');
     deleteLinks.forEach(link => {
@@ -8,4 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Smooth scroll to top on logo click (optional)
+    const logo = document.querySelector('.header h1');
+    if (logo) {
+        logo.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 });

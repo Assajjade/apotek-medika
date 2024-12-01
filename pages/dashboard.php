@@ -8,26 +8,19 @@ include '../config/db.php';
 
 $date = date('Y-m-d');
 $query = "SELECT COUNT(*) AS total_transaksi, SUM(total_harga) AS total_pendapatan 
-          FROM transaksi WHERE tanggal = '$date'";
-$result = mysqli_query($conn, $query);
-$data = mysqli_fetch_assoc($result);
+          FROM transaksi WHERE tanggal = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $date);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
 ?>
-<!DOCTYPE html>
-<html>
+<?php include '../templates/header.php'; ?>
 
-<head>
-    <title>Dashboard</title>
-</head>
+<h1>Dashboard</h1>
+<div>
+    <p>Total Transaksi Hari Ini: <b><?= number_format($data['total_transaksi'] ?? 0); ?></b></p>
+    <p>Total Pendapatan Hari Ini: <b>Rp <?= number_format($data['total_pendapatan'] ?? 0, 2); ?></b></p>
+</div>
 
-<body>
-    <h1>Dashboard</h1>
-    <p>Total Transaksi Hari Ini: <?= $data['total_transaksi'] ?? 0; ?></p>
-    <p>Total Pendapatan Hari Ini: Rp <?= number_format($data['total_pendapatan'] ?? 0, 2); ?></p>
-    <a href="manage_stocks.php">Kelola Stok</a>
-    <a href="manage_transactions.php">Kelola Transaksi</a>
-    <a href="manage_expirations.php">Kelola Kedaluwarsa</a>
-    <a href="reports.php">Laporan</a>
-    <a href="logout.php">Logout</a>
-</body>
-
-</html>
+<?php include '../templates/footer.php'; ?>

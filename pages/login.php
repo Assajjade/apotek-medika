@@ -1,15 +1,37 @@
 <?php
 require_once '../config/db.php';
 
-// Cek apakah ada pengguna di database
-$result = $conn->query("SELECT COUNT(*) AS user_count FROM users");
-$row = $result->fetch_assoc();
-if ($row['user_count'] == 0) {
-    header('Location: register.php');
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+
+    if (empty($username) || empty($password)) {
+        $error = "Username dan Password harus diisi.";
+    } else {
+        $query = "SELECT * FROM users WHERE username = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $username);
+
+        if (!$stmt->execute()) {
+            die("Error executing query: " . $conn->error);
+        }
+
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        if ($user && password_verify($password, $user['password'])) {
+            session_start();
+            $_SESSION['user'] = $user;
+            header('Location: dashboard.php');
+            exit;
+        } else {
+            $error = "Username atau password salah.";
+        }
+    }
 }
 
 ?>
+
 <!DOCTYPE html>
 <html>
 

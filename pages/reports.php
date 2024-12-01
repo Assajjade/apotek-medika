@@ -22,34 +22,44 @@ $result_stok = mysqli_query($conn, $query_stok);
 
 <body>
     <h1>Laporan</h1>
+
     <h2>Transaksi Harian</h2>
-    <table border="1">
-        <tr>
-            <th>Tanggal</th>
-            <th>Total Transaksi</th>
-            <th>Total Pendapatan</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($result_transaksi)): ?>
+    <?php if (mysqli_num_rows($result_transaksi) == 0): ?>
+        <p>Tidak ada transaksi pada periode ini.</p>
+    <?php else: ?>
+        <table border="1">
             <tr>
-                <td><?= $row['tanggal']; ?></td>
-                <td><?= $row['total_transaksi']; ?></td>
-                <td>Rp <?= number_format($row['total_pendapatan'], 2); ?></td>
+                <th>Tanggal</th>
+                <th>Total Transaksi</th>
+                <th>Total Pendapatan</th>
             </tr>
-        <?php endwhile; ?>
-    </table>
+            <?php while ($row = mysqli_fetch_assoc($result_transaksi)): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['tanggal']); ?></td>
+                    <td><?= $row['total_transaksi']; ?></td>
+                    <td>Rp <?= number_format($row['total_pendapatan'], 2); ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    <?php endif; ?>
+
     <h2>Stok Obat</h2>
-    <table border="1">
-        <tr>
-            <th>Nama Obat</th>
-            <th>Stok</th>
-        </tr>
-        <?php while ($row = mysqli_fetch_assoc($result_stok)): ?>
+    <?php if (mysqli_num_rows($result_stok) == 0): ?>
+        <p>Stok obat tidak tersedia.</p>
+    <?php else: ?>
+        <table border="1">
             <tr>
-                <td><?= $row['nama_obat']; ?></td>
-                <td><?= $row['stok']; ?></td>
+                <th>Nama Obat</th>
+                <th>Stok</th>
             </tr>
-        <?php endwhile; ?>
-    </table>
+            <?php while ($row = mysqli_fetch_assoc($result_stok)): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['nama_obat']); ?></td>
+                    <td><?= $row['stok']; ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    <?php endif; ?>
 </body>
 
 </html>

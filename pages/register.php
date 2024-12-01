@@ -2,12 +2,12 @@
 session_start();
 require_once '../config/db.php';
 
+// Check if users already exist
 $result = $conn->query("SELECT COUNT(*) AS user_count FROM users");
 $row = $result->fetch_assoc();
 if ($row['user_count'] > 0) {
     die("Registrasi tidak diizinkan karena pengguna sudah ada.");
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Semua field wajib diisi!";
     } elseif ($password !== $confirm_password) {
         $error = "Password tidak cocok!";
+    } elseif (strlen($password) < 6) {
+        $error = "Password harus memiliki minimal 6 karakter.";
     } else {
         // Hash password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);

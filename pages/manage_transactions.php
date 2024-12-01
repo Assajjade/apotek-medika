@@ -13,8 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $detail_transaksi = $_POST['detail_transaksi'];
 
     $query = "INSERT INTO transaksi (id_user, tanggal, total_harga, detail_transaksi) 
-              VALUES ($id_user, '$tanggal', $total_harga, '$detail_transaksi')";
-    mysqli_query($conn, $query);
+              VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("isds", $id_user, $tanggal, $total_harga, $detail_transaksi);
+    $stmt->execute();
     $success = "Transaksi berhasil dicatat!";
 }
 
@@ -49,7 +51,7 @@ $result = mysqli_query($conn, $query);
             <tr>
                 <td><?= $row['tanggal']; ?></td>
                 <td>Rp <?= number_format($row['total_harga'], 2); ?></td>
-                <td><?= $row['detail_transaksi']; ?></td>
+                <td><?= htmlspecialchars($row['detail_transaksi']); ?></td>
             </tr>
         <?php endwhile; ?>
     </table>

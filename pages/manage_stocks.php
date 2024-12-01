@@ -13,8 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $harga = $_POST['harga'];
 
     $query = "INSERT INTO obat (nama_obat, stok, tanggal_kedaluwarsa, harga) 
-              VALUES ('$nama_obat', $stok, '$tanggal_kedaluwarsa', $harga)";
-    mysqli_query($conn, $query);
+              VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sisd", $nama_obat, $stok, $tanggal_kedaluwarsa, $harga);
+    $stmt->execute();
     $success = "Obat berhasil ditambahkan!";
 }
 
@@ -52,7 +54,7 @@ $result = mysqli_query($conn, $query);
         </tr>
         <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <tr>
-                <td><?= $row['nama_obat']; ?></td>
+                <td><?= htmlspecialchars($row['nama_obat']); ?></td>
                 <td><?= $row['stok']; ?></td>
                 <td><?= $row['tanggal_kedaluwarsa']; ?></td>
                 <td>Rp <?= number_format($row['harga'], 2); ?></td>
