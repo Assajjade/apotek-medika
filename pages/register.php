@@ -2,6 +2,13 @@
 session_start();
 require_once '../config/db.php';
 
+$result = $conn->query("SELECT COUNT(*) AS user_count FROM users");
+$row = $result->fetch_assoc();
+if ($row['user_count'] > 0) {
+    die("Registrasi tidak diizinkan karena pengguna sudah ada.");
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
