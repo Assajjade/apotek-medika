@@ -1,0 +1,14 @@
+# Mencegah akses ke file tertentu
+<FilesMatch "\.(env|htaccess|ini|log|sh|sql|bak)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Mengarahkan ke index.php jika file tidak ditemukan
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Mencegah listing direktori
+Options -Indexes
