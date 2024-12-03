@@ -8,24 +8,30 @@ if (!isset($_SESSION['user'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
     <title>POS Apotek Media Medika</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 
-<body>
-    <div class="header">
-        <h1>POS Apotek Media Medika</h1>
-        <p>Selamat datang, <?= htmlspecialchars($_SESSION['user']['username']); ?></p>
-        <nav>
-            <a href="dashboard.php">Dashboard</a>
-            <a href="manage_stocks.php">Kelola Stok</a>
-            <a href="manage_transactions.php">Kelola Transaksi</a>
-            <a href="manage_expirations.php">Kelola Kedaluwarsa</a>
-            <a href="reports.php">Laporan</a>
-            <a href="logout.php">Logout</a>
-        </nav>
-    </div>
-    <div class="content">
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto p-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">POS Apotek Media Medika</h1>
+                <p class="text-sm">Selamat datang, <?= htmlspecialchars($_SESSION['user']['username']); ?></p>
+            </div>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="dashboard.php" class="hover:text-blue-300">Dashboard</a></li>
+                    <li><a href="manage_stocks.php" class="hover:text-blue-300">Kelola Stok</a></li>
+                    <li><a href="manage_transactions.php" class="hover:text-blue-300">Kelola Transaksi</a></li>
+                    <li><a href="manage_expirations.php" class="hover:text-blue-300">Kelola Kedaluwarsa</a></li>
+                    <li><a href="reports.php" class="hover:text-blue-300">Laporan</a></li>
+                    <li><a href="logout.php" class="hover:text-red-300">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto mt-6 p-4">
