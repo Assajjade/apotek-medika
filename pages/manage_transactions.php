@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $obat_id);
             $stmt->execute();
-            
+
             // Ambil hasil query secara benar
             $stmt->store_result(); // Menyimpan hasil query
             $stmt->bind_result($harga, $nama_obat, $stok);
@@ -85,84 +85,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 ?>
-<!DOCTYPE html>
-<html>
+<?php include '../templates/header.php'; ?>
 
-<head>
-    <title>Kelola Transaksi</title>
-    <link href="../dist/output.css" rel="stylesheet">
-</head>
+<h1 class="text-2xl font-bold mb-4">Kelola Transaksi</h1>
 
-<body>
-    <h1>Kelola Transaksi</h1>
-    <?php if (isset($success)) echo "<p style='color:green;'>$success</p>"; ?>
-    <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+<?php if (isset($success)): ?>
+    <p class="bg-green-100 text-green-800 p-2 rounded"><?= $success; ?></p>
+<?php elseif (isset($error)): ?>
+    <p class="bg-red-100 text-red-800 p-2 rounded"><?= $error; ?></p>
+<?php endif; ?>
 
-    <form method="POST">
-        <div id="obat-container">
-            <div class="obat-item">
-                <label>Obat:</label>
-                <select name="obat_id[]" required>
-                    <?php
-                    $query = "SELECT * FROM obat";
-                    $result = mysqli_query($conn, $query);
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<option value='{$row['id']}'>{$row['nama_obat']}</option>";
-                    }
-                    ?>
-                </select>
-                <label>Kuantitas:</label>
-                <input type="number" name="kuantitas[]" required min="1">
-            </div>
+<form method="POST" class="space-y-4">
+    <div id="obat-container">
+        <div class="flex items-center space-x-4">
+            <label for="obat_id" class="block text-gray-700">Obat:</label>
+            <select name="obat_id[]" required class="p-2 border rounded w-full">
+                <?php
+                $query = "SELECT * FROM obat";
+                $result = mysqli_query($conn, $query);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='{$row['id']}'>{$row['nama_obat']}</option>";
+                }
+                ?>
+            </select>
+            <label for="kuantitas" class="block text-gray-700">Kuantitas:</label>
+            <input type="number" name="kuantitas[]" required min="1" class="p-2 border rounded w-full">
         </div>
-        <button type="button" id="add-obat">Tambah Obat</button>
-        <button type="submit">Simpan</button>
-    </form>
+    </div>
+    <button type="button" id="add-obat" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Obat</button>
+    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Simpan</button>
+</form>
 
-    <h2>Riwayat Transaksi</h2>
-    <table border="1">
-        <tr>
-            <th>Tanggal</th>
-            <th>Total Harga</th>
-            <th>Detail Transaksi</th>
-        </tr>
-        <?php
-        // Menampilkan riwayat transaksi
-        $query = "SELECT * FROM transaksi ORDER BY tanggal DESC";
-        $result = mysqli_query($conn, $query);
-        while ($row = mysqli_fetch_assoc($result)):
-        ?>
-        <tr>
-            <td><?= $row['tanggal']; ?></td>
-            <td>Rp <?= number_format($row['total_harga'], 2); ?></td>
-            <td><?= htmlspecialchars($row['detail_transaksi']); ?></td>
-        </tr>
-        <?php endwhile; ?>
-    </table>
-
-    <script>
-        // Menambahkan input obat baru
-        document.getElementById("add-obat").addEventListener("click", function() {
-            const container = document.getElementById("obat-container");
-            const newItem = document.createElement("div");
-            newItem.classList.add("obat-item");
-            newItem.innerHTML = `
-                <label>Obat:</label>
-                <select name="obat_id[]" required>
-                    <?php
-                    $query = "SELECT * FROM obat";
-                    $result = mysqli_query($conn, $query);
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<option value='{$row['id']}'>{$row['nama_obat']}</option>";
-                    }
-                    ?>
-                </select>
-                <label>Kuantitas:</label>
-                <input type="number" name="kuantitas[]" required min="1">
-            `;
-            container.appendChild(newItem);
-        });
-    </script>
-</body>
-
-</html>
+<?php include '../templates/footer.php'; ?>
