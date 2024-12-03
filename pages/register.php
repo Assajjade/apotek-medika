@@ -40,32 +40,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrasi Pengguna</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.js"></script>
+    <link href="../dist/output.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="register-container">
-        <h2>Registrasi</h2>
-        <?php if (isset($error)) : ?>
-            <div class="alert error"><?= $error; ?></div>
-        <?php endif; ?>
-        <form method="POST" action="">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" required>
+<body class="bg-gray-100">
 
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" required>
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-center text-blue-600 mb-6">Registrasi</h2>
 
-            <label for="confirm_password">Konfirmasi Password</label>
-            <input type="password" name="confirm_password" id="confirm_password" required>
+            <?php if (isset($error)) : ?>
+                <div class="bg-red-200 text-red-600 p-3 rounded mb-4"><?= $error; ?></div>
+            <?php endif; ?>
 
-            <button type="submit">Daftar</button>
-        </form>
+            <form method="POST" action="">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" name="username" id="username" class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div class="mb-6">
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Daftar</button>
+            </form>
+
+        </div>
     </div>
+
 </body>
 
 </html>
