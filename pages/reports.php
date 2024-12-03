@@ -14,52 +14,75 @@ $query_stok = "SELECT nama_obat, stok FROM obat";
 $result_stok = mysqli_query($conn, $query_stok);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan</title>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.js"></script>
+    <link href="../dist/output.css" rel="stylesheet">
 </head>
 
-<body>
-    <h1>Laporan</h1>
+<body class="bg-gray-100">
 
-    <h2>Transaksi Harian</h2>
-    <?php if (mysqli_num_rows($result_transaksi) == 0): ?>
-        <p>Tidak ada transaksi pada periode ini.</p>
-    <?php else: ?>
-        <table border="1">
-            <tr>
-                <th>Tanggal</th>
-                <th>Total Transaksi</th>
-                <th>Total Pendapatan</th>
-            </tr>
-            <?php while ($row = mysqli_fetch_assoc($result_transaksi)): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['tanggal']); ?></td>
-                    <td><?= $row['total_transaksi']; ?></td>
-                    <td>Rp <?= number_format($row['total_pendapatan'], 2); ?></td>
-                </tr>
-            <?php endwhile; ?>
-        </table>
-    <?php endif; ?>
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-semibold text-center text-blue-600 mb-6">Laporan</h1>
 
-    <h2>Stok Obat</h2>
-    <?php if (mysqli_num_rows($result_stok) == 0): ?>
-        <p>Stok obat tidak tersedia.</p>
-    <?php else: ?>
-        <table border="1">
-            <tr>
-                <th>Nama Obat</th>
-                <th>Stok</th>
-            </tr>
-            <?php while ($row = mysqli_fetch_assoc($result_stok)): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['nama_obat']); ?></td>
-                    <td><?= $row['stok']; ?></td>
-                </tr>
-            <?php endwhile; ?>
-        </table>
-    <?php endif; ?>
+        <!-- Laporan Transaksi -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Transaksi Harian</h2>
+            <?php if (mysqli_num_rows($result_transaksi) == 0): ?>
+                <p class="text-gray-600">Tidak ada transaksi pada periode ini.</p>
+            <?php else: ?>
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                    <thead>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="py-2 px-4 text-left">Tanggal</th>
+                            <th class="py-2 px-4 text-left">Total Transaksi</th>
+                            <th class="py-2 px-4 text-left">Total Pendapatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = mysqli_fetch_assoc($result_transaksi)): ?>
+                            <tr class="border-t">
+                                <td class="py-2 px-4"><?= htmlspecialchars($row['tanggal']); ?></td>
+                                <td class="py-2 px-4"><?= $row['total_transaksi']; ?></td>
+                                <td class="py-2 px-4">Rp <?= number_format($row['total_pendapatan'], 2); ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+
+        <!-- Laporan Stok Obat -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Stok Obat</h2>
+            <?php if (mysqli_num_rows($result_stok) == 0): ?>
+                <p class="text-gray-600">Stok obat tidak tersedia.</p>
+            <?php else: ?>
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-sm">
+                    <thead>
+                        <tr class="bg-green-600 text-white">
+                            <th class="py-2 px-4 text-left">Nama Obat</th>
+                            <th class="py-2 px-4 text-left">Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = mysqli_fetch_assoc($result_stok)): ?>
+                            <tr class="border-t">
+                                <td class="py-2 px-4"><?= htmlspecialchars($row['nama_obat']); ?></td>
+                                <td class="py-2 px-4"><?= $row['stok']; ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+
+    </div>
+
 </body>
 
 </html>
