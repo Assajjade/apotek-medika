@@ -6,13 +6,15 @@ if (!isset($_SESSION['user'])) {
 }
 include '../config/db.php';
 
-$query_transaksi = "SELECT tanggal, COUNT(*) AS total_transaksi, SUM(total_harga) AS total_pendapatan 
-                    FROM transaksi GROUP BY tanggal";
+// Laporan transaksi
+$query_transaksi = "SELECT tanggal, COUNT(*) AS total_transaksi, SUM(total_harga) AS total_pendapatan FROM transaksi GROUP BY tanggal";
 $result_transaksi = mysqli_query($conn, $query_transaksi);
 
-$query_stok = "SELECT nama_obat, stok FROM obat";
+// Laporan stok dengan tanggal kedaluwarsa
+$query_stok = "SELECT nama_obat, stok, tanggal_kedaluwarsa FROM obat ORDER BY nama_obat, tanggal_kedaluwarsa";
 $result_stok = mysqli_query($conn, $query_stok);
 ?>
+
 <?php include '../templates/header.php'; ?>
 
 <div class="container mx-auto p-6">
