@@ -66,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (isset($error)) { ?>
             <p class="text-red-500 text-sm text-center mt-4"><?= $error; ?></p>
         <?php } ?>
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Belum punya akun? <a href="register.php" class="text-blue-600 hover:underline">Daftar di sini</a>.
+        </p>
+
     </div>
 
 </body>

@@ -15,6 +15,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_assoc();
 ?>
+
 <?php include '../templates/header.php'; ?>
 
 <!DOCTYPE html>

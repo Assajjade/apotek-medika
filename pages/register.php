@@ -3,11 +3,12 @@ session_start();
 require_once '../config/db.php';
 
 // Check if users already exist
-$result = $conn->query("SELECT COUNT(*) AS user_count FROM users");
-$row = $result->fetch_assoc();
-if ($row['user_count'] > 0) {
-    die("Registrasi tidak diizinkan karena pengguna sudah ada.");
-}
+// $result = $conn->query("SELECT COUNT(*) AS user_count FROM users");
+// $row = $result->fetch_assoc();
+// if ($row['user_count'] > 0) {
+//     header('Location: login.php');
+//     exit;
+// }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
@@ -78,7 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Daftar</button>
             </form>
-
+            <!-- Tautan ke halaman login -->
+            <p class="text-center text-sm text-gray-600 mt-6">
+                Sudah punya akun? <a href="login.php" class="text-blue-600 hover:underline">Login di sini</a>.
+            </p>
         </div>
     </div>
 
