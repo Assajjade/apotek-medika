@@ -21,14 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($obat_ids as $index => $obat_id) {
             $kuantitas_obat = $kuantitas[$index];
 
-            // Ambil stok dengan tanggal kedaluwarsa terdekat
+            // Fetch all records for the current `obat_id`
             $query = "SELECT id, stok, harga, nama_obat FROM obat WHERE id = ? ORDER BY tanggal_kedaluwarsa ASC";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $obat_id);
             $stmt->execute();
-            $stmt->bind_result($id, $stok, $harga, $nama_obat);
+            $result = $stmt->get_result();
 
-            while ($stmt->fetch() && $kuantitas_obat > 0) {
+            while ($row = $result->fetch_assoc() && $kuantitas_obat > 0) {
+                $id = $row['id'];
+                $stok = $row['stok'];
+                $harga = $row['harga'];
+                $nama_obat = $row['nama_obat'];
+
                 if ($stok > 0) {
                     $used_stok = min($stok, $kuantitas_obat);
                     $kuantitas_obat -= $used_stok;
@@ -43,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $detail_transaksi .= "$nama_obat ($used_stok) - Rp " . number_format($harga, 2) . "<br>";
                 }
             }
+            $stmt->close();
         }
 
         $query = "INSERT INTO transaksi (id_user, tanggal, total_harga, detail_transaksi) VALUES (?, ?, ?, ?)";
