@@ -12,35 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tanggal_kedaluwarsa = $_POST['tanggal_kedaluwarsa'];
     $harga = $_POST['harga'];
 
-    // Cek jika obat dengan tanggal kedaluwarsa sama sudah ada
-    $query = "SELECT id, stok FROM obat WHERE nama_obat = ? AND tanggal_kedaluwarsa = ?";
+    $query = "INSERT INTO obat (nama_obat, stok, tanggal_kedaluwarsa, harga) 
+              VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ss", $nama_obat, $tanggal_kedaluwarsa);
+    $stmt->bind_param("sisd", $nama_obat, $stok, $tanggal_kedaluwarsa, $harga);
     $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        // Jika sudah ada, update stok
-        $stmt->bind_result($id, $existing_stok);
-        $stmt->fetch();
-        $new_stok = $existing_stok + $stok;
-        $update_query = "UPDATE obat SET stok = ? WHERE id = ?";
-        $update_stmt = $conn->prepare($update_query);
-        $update_stmt->bind_param("ii", $new_stok, $id);
-        $update_stmt->execute();
-    } else {
-        // Jika belum ada, tambahkan sebagai entry baru
-        $query = "INSERT INTO obat (nama_obat, stok, tanggal_kedaluwarsa, harga) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("sisd", $nama_obat, $stok, $tanggal_kedaluwarsa, $harga);
-        $stmt->execute();
-    }
-
-    $success = "Obat berhasil ditambahkan atau diperbarui!";
+    $success = "Obat berhasil ditambahkan!";
 }
 
-// Ambil semua obat untuk ditampilkan
-$query = "SELECT * FROM obat ORDER BY nama_obat, tanggal_kedaluwarsa";
+$query = "SELECT * FROM obat";
 $result = mysqli_query($conn, $query);
 ?>
 <?php include '../templates/header.php'; ?>

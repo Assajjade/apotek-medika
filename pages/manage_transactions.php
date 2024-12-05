@@ -7,64 +7,84 @@ if (!isset($_SESSION['user'])) {
 
 include '../config/db.php';
 
+// Cek jika ID user ada di tabel users
+$query = "SELECT id FROM users WHERE id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $_SESSION['user']['id']);
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows == 0) {
+    die("ID user tidak ditemukan di database.");
+}
+
+$stmt->close();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_user = $_SESSION['user']['id'];
     $tanggal = date('Y-m-d');
     $total_harga = 0;
     $detail_transaksi = "";
-    $obat_ids = $_POST['obat_id'];
-    $kuantitas = $_POST['kuantitas'];
+    $obat_ids = $_POST['obat_id'];  // Mendapatkan array obat_id
+    $kuantitas = $_POST['kuantitas'];  // Mendapatkan array kuantitas
 
+    // Mulai transaksi untuk menghindari kegagalan saat update stok
     $conn->begin_transaction();
 
     try {
+        // Ambil data obat yang dipilih dan kuantitasnya
         foreach ($obat_ids as $index => $obat_id) {
             $kuantitas_obat = $kuantitas[$index];
 
-            // Fetch all records for the current `obat_id`
-            $query = "SELECT id, stok, harga, nama_obat FROM obat WHERE id = ? ORDER BY tanggal_kedaluwarsa ASC";
+            // Ambil harga obat dari database
+            $query = "SELECT harga, nama_obat, stok FROM obat WHERE id = ?";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $obat_id);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            while ($row = $result->fetch_assoc() && $kuantitas_obat > 0) {
-                $id = $row['id'];
-                $stok = $row['stok'];
-                $harga = $row['harga'];
-                $nama_obat = $row['nama_obat'];
-
-                if ($stok > 0) {
-                    $used_stok = min($stok, $kuantitas_obat);
-                    $kuantitas_obat -= $used_stok;
-                    $new_stok = $stok - $used_stok;
-
-                    $update_query = "UPDATE obat SET stok = ? WHERE id = ?";
-                    $update_stmt = $conn->prepare($update_query);
-                    $update_stmt->bind_param("ii", $new_stok, $id);
-                    $update_stmt->execute();
-
-                    $total_harga += $used_stok * $harga;
-                    $detail_transaksi .= "$nama_obat ($used_stok) - Rp " . number_format($harga, 2) . "<br>";
+            // Ambil hasil query secara benar
+            $stmt->store_result(); // Menyimpan hasil query
+            $stmt->bind_result($harga, $nama_obat, $stok);
+            if ($stmt->fetch()) {  // Ambil hasil pertama dari query
+                // Periksa jika stok cukup
+                if ($stok < $kuantitas_obat) {
+                    throw new Exception("Stok obat '$nama_obat' tidak cukup.");
                 }
+
+                // Hitung total harga berdasarkan kuantitas
+                $total_harga += $harga * $kuantitas_obat;
+
+                // Tambahkan detail transaksi
+                $detail_transaksi .= $nama_obat . " - " . $kuantitas_obat . " x Rp " . number_format($harga, 2) . "<br>";
+
+                // Kurangi stok obat setelah transaksi
+                $new_stok = $stok - $kuantitas_obat;
+                $update_query = "UPDATE obat SET stok = ? WHERE id = ?";
+                $update_stmt = $conn->prepare($update_query);
+                $update_stmt->bind_param("ii", $new_stok, $obat_id);
+                $update_stmt->execute();
             }
-            $stmt->close();
+
+            $stmt->free_result(); // Bebaskan hasil query setelah digunakan
         }
 
+        // Masukkan transaksi ke dalam database
         $query = "INSERT INTO transaksi (id_user, tanggal, total_harga, detail_transaksi) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("isds", $id_user, $tanggal, $total_harga, $detail_transaksi);
         $stmt->execute();
 
+        // Commit transaksi jika semua berjalan lancar
         $conn->commit();
-        $success = "Transaksi berhasil dicatat!";
+        $success = "Transaksi berhasil dicatat dan stok telah diperbarui!";
     } catch (Exception $e) {
+        // Rollback jika ada error
         $conn->rollback();
         $error = "Terjadi kesalahan: " . $e->getMessage();
     }
 }
-?>
 
+?>
 <?php include '../templates/header.php'; ?>
 
 <h1 class="text-2xl font-bold mb-4">Kelola Transaksi</h1>
