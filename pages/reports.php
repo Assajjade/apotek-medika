@@ -7,11 +7,16 @@ if (!isset($_SESSION['user'])) {
 include '../config/db.php';
 
 // Laporan transaksi
-$query_transaksi = "SELECT tanggal, COUNT(*) AS total_transaksi, SUM(total_harga) AS total_pendapatan FROM transaksi GROUP BY tanggal";
+$query_transaksi = "SELECT id, tanggal, total_harga, detail_transaksi 
+                    FROM transaksi 
+                    ORDER BY tanggal DESC";
 $result_transaksi = mysqli_query($conn, $query_transaksi);
 
 // Laporan stok dengan tanggal kedaluwarsa
-$query_stok = "SELECT nama_obat, stok, tanggal_kedaluwarsa FROM obat ORDER BY nama_obat, tanggal_kedaluwarsa";
+$query_stok = "SELECT nama_obat, stok, tanggal_kedaluwarsa, created_at 
+               FROM obat 
+               ORDER BY nama_obat ASC, tanggal_kedaluwarsa ASC";
+
 $result_stok = mysqli_query($conn, $query_stok);
 ?>
 
@@ -30,16 +35,23 @@ $result_stok = mysqli_query($conn, $query_stok);
                 <thead>
                     <tr class="bg-blue-600 text-white">
                         <th class="py-2 px-4 text-left">Tanggal</th>
-                        <th class="py-2 px-4 text-left">Total Transaksi</th>
                         <th class="py-2 px-4 text-left">Total Pendapatan</th>
+                        <th class="py-2 px-4 text-left">Detail Barang</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php while ($row = mysqli_fetch_assoc($result_transaksi)): ?>
                         <tr class="border-t">
                             <td class="py-2 px-4"><?= htmlspecialchars($row['tanggal']); ?></td>
-                            <td class="py-2 px-4"><?= $row['total_transaksi']; ?></td>
-                            <td class="py-2 px-4">Rp <?= number_format($row['total_pendapatan'], 2); ?></td>
+                            <td class="py-2 px-4">Rp <?= number_format($row['total_harga'], 2); ?></td>
+                            <td class="py-2 px-4">
+                                <details>
+                                    <summary class="text-blue-500 cursor-pointer">Lihat Barang</summary>
+                                    <div class="mt-2 ml-4">
+                                        <?= htmlspecialchars_decode($row['detail_transaksi']); ?>
+                                    </div>
+                                </details>
+                            </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
@@ -58,20 +70,28 @@ $result_stok = mysqli_query($conn, $query_stok);
                     <tr class="bg-green-600 text-white">
                         <th class="py-2 px-4 text-left">Nama Obat</th>
                         <th class="py-2 px-4 text-left">Stok</th>
+                        <th class="py-2 px-4 text-left">Tanggal Kedaluwarsa</th>
+                        <th class="py-2 px-4 text-left">Tanggal Input</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php while ($row = mysqli_fetch_assoc($result_stok)): ?>
+
+                        <?php // Atur zona waktu
+                        date_default_timezone_set('Asia/Jakarta');
+                        $tanggal_kedaluwarsa = date('l, j F Y', strtotime($row['tanggal_kedaluwarsa']));
+                        $tanggal_input = date('l, j F Y', strtotime($row['created_at'])); ?>
                         <tr class="border-t">
                             <td class="py-2 px-4"><?= htmlspecialchars($row['nama_obat']); ?></td>
                             <td class="py-2 px-4"><?= $row['stok']; ?></td>
+                            <td class="py-2 px-4"><?= htmlspecialchars($tanggal_kedaluwarsa); ?></td>
+                            <td class="py-2 px-4"><?= htmlspecialchars($tanggal_input); ?></td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
         <?php endif; ?>
     </div>
-
 </div>
 
 <?php include '../templates/footer.php'; ?>

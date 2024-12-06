@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Apotek Media Medika</title>
     <link href="../dist/output.css" rel="stylesheet">
-    <script src="../assets/js/script.js"></script>
 </head>
 
 <body class="bg-gray-100 text-gray-800 font-sans">
