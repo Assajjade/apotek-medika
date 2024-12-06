@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Apotek Media Medika</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href="../dist/output.css" rel="stylesheet">
+    <script src="../assets/js/script.js"></script>
 </head>
 
 <body class="bg-gray-100">
