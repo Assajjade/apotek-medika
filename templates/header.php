@@ -8,18 +8,23 @@
     <link href="../dist/output.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 text-gray-800 font-sans">
-    <header class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">POS Apotek Media Medika</h1>
-            <nav class="flex">
-                <a href="dashboard.php" class="hover:text-gray-200 px-4">Dashboard</a>
-                <a href="manage_stocks.php" class="hover:text-gray-200 px-4">Kelola Stok</a>
-                <a href="manage_transactions.php" class="hover:text-gray-200 px-4">Kelola Transaksi</a>
-                <a href="manage_expirations.php" class="hover:text-gray-200 px-4">Kelola Kedaluwarsa</a>
-                <a href="reports.php" class="hover:text-gray-200 px-4">Laporan</a>
-                <a href="logout.php" class="hover:text-gray-200 px-4">Logout</a>
+<body class="bg-gray-100">
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto p-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">POS Apotek Media Medika</h1>
+                <p class="text-sm">Selamat datang, <?= htmlspecialchars($_SESSION['user']['username']); ?></p>
+            </div>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="dashboard.php" class="hover:text-blue-300">Dashboard</a></li>
+                    <li><a href="manage_stocks.php" class="hover:text-blue-300">Kelola Stok</a></li>
+                    <li><a href="manage_transactions.php" class="hover:text-blue-300">Kelola Transaksi</a></li>
+                    <li><a href="manage_expirations.php" class="hover:text-blue-300">Kelola Kedaluwarsa</a></li>
+                    <li><a href="reports.php" class="hover:text-blue-300">Laporan</a></li>
+                    <li><a href="logout.php" class="hover:text-red-300">Logout</a></li>
+                </ul>
             </nav>
         </div>
     </header>
-    <main class="container mx-auto p-4">
+    <main class="container mx-auto mt-6 p-4">
