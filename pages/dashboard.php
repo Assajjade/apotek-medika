@@ -25,31 +25,7 @@ $data = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Stok</title>
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.js"></script>
-</head>
 
-<div class="container mx-auto py-10 px-6">
-    <h1 class="text-3xl font-semibold text-center text-blue-600 mb-6">Dashboard</h1>
-
-    <div class="flex items-center gap-1.5">
-        <!-- Card 1 -->
-        <div class=" bg-white shadow-lg rounded-lg p-6 mr-1 flex items-center space-x-4 border-l-4 border-green-500 w-full h-">
-            <div class="text-green-600 text-4xl">
-                <i class="fas fa-receipt"></i>
-            </div>
-            <div>
-                <p class="text-lg font-medium text-gray-700">Total Transaksi Hari Ini</p>
-                <p class="text-3xl font-bold text-gray-800"><?= number_format($data['total_transaksi'] ?? 0); ?></p>
-            </div>
-        </div>
-        
-        <!-- Card 2 -->
-        <div class="mr-4 bg-white shadow-lg rounded-lg p-6 flex items-center space-x-4 border-l-4 border-blue-500 w-full">
-            <div class="text-blue-600 text-4xl">
-                <i class="fas fa-money-bill-wave"></i>
-            </div>
-            <div>
-                <p class="text-lg font-medium text-gray-700">Total Pendapatan Hari Ini</p>
-                <p class="text-3xl font-bold text-gray-800">Rp <?= number_format($data['total_pendapatan'] ?? 0, 2); ?></p>
             </div>
         </div>
     </div>
