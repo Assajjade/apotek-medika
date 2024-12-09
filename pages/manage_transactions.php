@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $obat_ids = $_POST['obat_id'] ?? [];
     $kuantitas = $_POST['kuantitas'] ?? [];
 
-    // Validasi input
     if (empty($obat_ids) || empty($kuantitas)) {
         $error = "Pilih setidaknya satu obat dengan kuantitas yang valid.";
     } else {
@@ -81,45 +80,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <?php include '../templates/header.php'; ?>
 
-<h1 class="text-2xl font-bold mb-4">Kelola Transaksi</h1>
+<!DOCTYPE html>
+<html lang="id">
 
-<?php if (isset($success)): ?>
-    <p class="bg-green-100 text-green-800 p-2 rounded"><?= $success; ?></p>
-<?php elseif (isset($error)): ?>
-    <p class="bg-red-100 text-red-800 p-2 rounded"><?= $error; ?></p>
-<?php endif; ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Apotek Media Medika</title>
+    <link href="../dist/output.css" rel="stylesheet">
+</head>
 
-<form method="POST" class="space-y-4">
-    <div id="obat-container">
-        <div class="flex items-center space-x-4">
-            <label for="obat_id" class="block text-gray-700">Obat:</label>
-            <select name="obat_id[]" required class="p-2 border rounded w-full">
-                <?php
-                $query = "SELECT id, nama_obat FROM obat";
-                $result = $conn->query($query);
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['id']}'>{$row['nama_obat']}</option>";
-                }
-                ?>
-            </select>
-            <label for="kuantitas" class="block text-gray-700">Kuantitas:</label>
-            <input type="number" name="kuantitas[]" required min="1" class="p-2 border rounded w-full">
+<div class="max-w-4xl mx-auto p-6 bg-gray-50 rounded shadow">
+    <h1 class="text-3xl font-bold mb-6">Kelola Transaksi</h1>
+
+    <?php if (isset($success)): ?>
+        <p class="bg-green-100 text-green-800 p-4 rounded"><?= $success; ?></p>
+    <?php elseif (isset($error)): ?>
+        <p class="bg-red-100 text-red-800 p-4 rounded"><?= $error; ?></p>
+    <?php endif; ?>
+
+    <form method="POST" class="space-y-4">
+        <div id="obat-container">
+            <div class="flex items-center space-x-4">
+                <label for="obat_id" class="p-3 block text-gray-700">Obat:</label>
+                <select name="obat_id[]" required class=" p-3 border rounded w-full">
+                    <?php
+                    $query = "SELECT id, nama_obat FROM obat";
+                    $result = $conn->query($query);
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='{$row['id']}'>{$row['nama_obat']}</option>";
+                    }
+                    ?>
+                </select>
+                <label for="kuantitas" class="p-3 block text-gray-700">Kuantitas:</label>
+                <input type="number" name="kuantitas[]" required min="1" class="p-3 border rounded w-full">
+            </div>
         </div>
-    </div>
-    <button type="button" id="add-obat" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Obat</button>
-    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Simpan</button>
-</form>
+        <button type="button" id="add-obat" class="bg-blue-600 text-white px-4 py-2 rounded">Tambah Obat</button>
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Simpan</button>
+    </form>
+</div>
 
 <script>
     document.getElementById('add-obat').addEventListener('click', function() {
         const container = document.getElementById('obat-container');
         const div = document.createElement('div');
-        div.classList.add('flex', 'items-center', 'space-x-4');
+        div.classList.add('flex', 'items-center', 'space-x-4', 'mt-4');
         div.innerHTML = `
-            <label for="obat_id" class="block text-gray-700">Obat:</label>
-            <select name="obat_id[]" required class="p-2 border rounded w-full">
+            <label for="obat_id" class="p-3 block text-gray-700">Obat:</label>
+            <select name="obat_id[]" required class="p-3 border rounded w-full">
                 <?php
                 $query = "SELECT id, nama_obat FROM obat";
                 $result = $conn->query($query);
@@ -128,8 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 ?>
             </select>
-            <label for="kuantitas" class="block text-gray-700">Kuantitas:</label>
-            <input type="number" name="kuantitas[]" required min="1" class="p-2 border rounded w-full">
+            <label for="kuantitas" class="p-3 block text-gray-700">Kuantitas:</label>
+            <input type="number" name="kuantitas[]" required min="1" class="p-3 border rounded w-full">
         `;
         container.appendChild(div);
     });

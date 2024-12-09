@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Apotek Media Medika</title>
-    <link href="../dist/output.css" rel="stylesheet">
+    <link href="./dist/output.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -23,8 +23,8 @@
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
             <h1 class="text-2xl font-semibold">POS Apotek Media Medika</h1>
             <nav class="flex space-x-4">
-                <a href="pages/Login.php" class="hover:text-gray-300 transition">Login</a>
-                <a href="pages/register.php" class="hover:text-gray-300 transition">Register</a>
+                <a href="pages/Login.php" class="hover:text-gray-200 px-4">Login</a>
+                <a href="pages/register.php" class="hover:text-gray-200 px-4">Register</a>
             </nav>
         </div>
     </header>
