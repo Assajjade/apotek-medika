@@ -18,12 +18,12 @@
             </div>
             <nav>
                 <ul class="flex space-x-4">
-                    <li><a href="dashboard.php" class="hover:text-blue-300">Dashboard</a></li>
-                    <li><a href="manage_stocks.php" class="hover:text-blue-300">Kelola Stok</a></li>
-                    <li><a href="manage_transactions.php" class="hover:text-blue-300">Kelola Transaksi</a></li>
-                    <li><a href="manage_expirations.php" class="hover:text-blue-300">Kelola Kedaluwarsa</a></li>
-                    <li><a href="reports.php" class="hover:text-blue-300">Laporan</a></li>
-                    <li><a href="logout.php" class="hover:text-red-300">Logout</a></li>
+                    <li><a href="dashboard.php" class="hover:text-blue-300 px-4">Dashboard</a></li>
+                    <li><a href="manage_stocks.php" class="hover:text-blue-300 px-4">Kelola Stok</a></li>
+                    <li><a href="manage_transactions.php" class="hover:text-blue-300 px-4">Kelola Transaksi</a></li>
+                    <li><a href="manage_expirations.php" class="hover:text-blue-300 px-4">Kelola Kedaluwarsa</a></li>
+                    <li><a href="reports.php" class="hover:text-blue-300 px-4">Laporan</a></li>
+                    <li><a href="logout.php" class="hover:text-red-300 px-4">Logout</a></li>
                 </ul>
             </nav>
         </div>
