@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute();
 
             $conn->commit();
-            $success = "Transaksi berhasil dicatat!";
+            $success = "Transaksi berhasil dicatat! Total Harga: $total_harga ";
         } catch (Exception $e) {
             $conn->rollback();
             $error = "Terjadi kesalahan: " . $e->getMessage();

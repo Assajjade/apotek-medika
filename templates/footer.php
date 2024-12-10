@@ -9,7 +9,7 @@
 </head>
 
 </div>
-<footer class="bg-gray-800 text-white py-4 mt-8">
+<footer class="bg-blue-600 text-white py-4 mt-8">
     <div class="container mx-auto text-center">
         <p class="text-sm">&copy; <?= date('Y'); ?> <span class="font-bold">POS Apotek Media Medika</span>. All rights reserved.</p>
         <p class="text-xs mt-1">
